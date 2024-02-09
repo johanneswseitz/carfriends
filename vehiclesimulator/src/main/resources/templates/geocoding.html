@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <h2>Geocoding</h2>
+    <form action="/geocoding/query" method="post">
+        <section>
+            <label for="address">Address Eingabe</label>
+            <input type="text" name="address" id="address" th:value="${address}"/>
+            <input type="submit" value="Geocode"/>
+            <section>
+                <span th:text="${result}"></span>
+            </section>
+        </section>
+    </form>
+</section>
+</body>
+</html>

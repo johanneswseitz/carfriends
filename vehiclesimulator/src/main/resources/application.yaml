@@ -1,0 +1,4 @@
+here-maps:
+  api-key: ${API_KEY}
+  geocoding:
+    base-url: https://geocode.search.hereapi.com
