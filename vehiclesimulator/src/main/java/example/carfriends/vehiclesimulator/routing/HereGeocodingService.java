@@ -17,6 +17,7 @@ public class HereGeocodingService implements GeocodingService {
 
     public HereGeocodingService(HereMapsConfiguration.HereMapsProperties hereMapsProperties) {
         this.hereMapsProperties = hereMapsProperties;
+        System.out.println(hereMapsProperties);
         this.restClient = RestClient.builder().baseUrl(hereMapsProperties.geocoding().baseUrl())
                 .defaultHeader(USER_AGENT, "vehicle-simulator")
                 .defaultUriVariables(Map.of("apiKey", hereMapsProperties.apiKey()))

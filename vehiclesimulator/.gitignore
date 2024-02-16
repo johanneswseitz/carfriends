@@ -44,3 +44,6 @@ replay_pid*
 
 # Mac
 .DS_Store
+
+# Local environment config
+.env
