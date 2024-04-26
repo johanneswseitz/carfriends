@@ -7,29 +7,23 @@
 <body>
 <div class="container">
     <table class="table table-striped">
-        <caption>Your todos are</caption>
         <thead>
         <tr>
-            <th>Description</th>
-            <th>Target Date</th>
-            <th>Is it Done?</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Vin</th>
+            <th>Location(Latitude, Longitude)</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Todo 1</td>
-            <td>10/12/2017</td>
-            <td>No</td>
-            <td><a class="btn btn-warning" href="/edit-todo">Edit Todo</a></td>
-            <td><a class="btn btn-warning" href="/delete-todo">Delete Todo</a></td>
+        <tr th:each="sensor : ${sensors}">
+            <td th:text="${sensor.vin.vin}"></td>
+            <td th:text="${sensor.location.latitude} + ', ' + ${sensor.location.longitude}"></td>
+            <td><a th:href="@{/sensors/{id}(id=${sensor.vin.vin})}" class="btn btn-outline-danger">Sensor Details</a></td>
         </tr>
         </tbody>
     </table>
     <div>
-        <a class="btn btn-default" href="/add-todo">Add a Todo</a>
-
+        <a class="btn btn-primary" href="/add-sensor">Add a Sensor</a>
     </div>
 </div>
 </body>

@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Welcome</title>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/leaflet/1.9.4/dist/leaflet.css"/>
+    <script src="/webjars/leaflet/1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+<div class="container h-100 d-flex flex-column">
+    <div class="row flex-grow-0">
+        <h1 th:text="'Sensor ' + ${vin}"></h1>
+        <span th:text="'Longitude: ' + ${longitude} + ', Latititude: ' + ${latitude}"></span>
+    </div>
+    <div class="row flex-grow-1" id="map"></div>
+</div>
+<script th:inline="javascript">
+    const latitude = /*[[${latitude}]]*/ "";
+    const longitude = /*[[${longitude}]]*/ "";
+    const map = L.map('map').setView([latitude, longitude], 6);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    L.circle([latitude, longitude], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 1.50,
+        radius: 5
+    }).addTo(map);
+</script>
+</body>
+</html>
