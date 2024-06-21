@@ -2,3 +2,7 @@ here-maps:
   api-key: ${API_KEY}
   geocoding:
     base-url: https://geocode.search.hereapi.com
+hive-mq:
+  username: vehicle-simulator
+  password: ${MQTT_PASSWORD}
+  broker-url: 4d80fb0f1f4941ea8ea5b1418788c307.s1.eu.hivemq.cloud
