@@ -50,5 +50,5 @@ class Fahrzeug(models.Model):
         verbose_name_plural = "Fahrzeuge"
         ordering = ['kennzeichen']
 
-        def __str__(self):
-            return f"{self.hersteller} {self.modell} ({self.kennzeichen})"
+    def __str__(self):
+        return f"{self.hersteller} {self.modell} ({self.kennzeichen})"

@@ -43,3 +43,7 @@ replay_pid*
 
 # Mac
 .DS_Store
+.env
+.env~
+
+*.pyc
