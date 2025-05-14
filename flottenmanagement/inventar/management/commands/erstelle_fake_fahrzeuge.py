@@ -25,6 +25,7 @@ class Command(BaseCommand):
 
         for _ in range(30):
             hersteller = random.choice(list(hersteller_modelle.keys()))
+            versicherer = fake.company()
             modell = random.choice(hersteller_modelle[hersteller])
 
             fahrzeug = Fahrzeug(
@@ -41,11 +42,11 @@ class Command(BaseCommand):
                 tueranzahl=random.choice([3, 5]),
                 erstzulassung=fake.date_between(start_date='-7y', end_date='-1y'),
                 naechste_hauptuntersuchung=date.today() + timedelta(days=random.randint(100, 1000)),
-                versicherer=fake.company(),
+                versicherer=versicherer,
                 versicherungsnummer=fake.bothify(text='??-#######'),
                 mietpreis_pro_tag=round(random.uniform(35.0, 120.0), 2),
                 status=random.choice(statuswahl),
-                bemerkungen=fake.sentence(nb_words=8),
+                bemerkungen=""
             )
             fahrzeug.save()
 

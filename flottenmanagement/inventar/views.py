@@ -1,3 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
-# Create your views here.
+from inventar.models import Fahrzeug
+
+
+def index(request):
+    fahrzeuge = Fahrzeug.objects.all()
+    return render(request, "inventar/index.html", locals())

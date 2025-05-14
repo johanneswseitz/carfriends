@@ -1,4 +1,5 @@
 from openai import OpenAI, BadRequestError
+import base64
 
 client = OpenAI()
 import requests
@@ -9,58 +10,37 @@ from django.core.management.base import BaseCommand
 
 
 def generate_and_save_assets_for_car(car: Fahrzeug):
-
     try:
-        response = (client.images.generate
-            #
-
-            (
-            model="dall-e-3",
-            prompt="A futuristic cityscape at sunset",
-            size="1024x1024",
-            n=1
-        ))
-    except BadRequestError as e:
-        print(f"BadRequestError: {e}")
-        if hasattr(e, 'response') and e.response:
-            print(f"Response content: {e.response.text}")
-        raise
-
-    # 1. Realistisches Fahrzeugbild generieren
-    try:
+        prompt = f"Generate an image of {car.farbe} coloured {car.name} with a german license plate ({car.kennzeichen}) on a parking place that is marked 'Carfriends Car Sharing'"
+        print(f"Car without image: {car}")
+        print(f"Using Prompt: {prompt}")
         image_response = client.images.generate(
-            model="dall-e-3",
-            prompt=f"Realistic photo of a {car.name}, parked on a street.",
+            model="gpt-image-1",
+            prompt=prompt,
+            quality="medium",
             size="1024x1024",
+            n=1,
         )
+        b64_image = image_response.data[0].b64_json
+        image_data = base64.b64decode(b64_image)
+
+        # Save to car.foto
+        img_temp = NamedTemporaryFile(delete=False)
+        img_temp.write(image_data)
+        img_temp.flush()
+        img_temp.seek(0)
+        car.foto.save(f"{car.name.lower().replace(' ', '_')}_image.png", ContentFile(img_temp.read()), save=True)
     except BadRequestError as e:
         print(f"BadRequestError: {e}")
         raise
-    image_url = image_response.data[0].url
-    img_temp = NamedTemporaryFile(delete=True)
-    img_temp.write(requests.get(image_url).content)
-    img_temp.flush()
-    car.foto.save(f"{car.name.lower().replace(' ', '_')}_image.png", ContentFile(img_temp.read()), save=False)
-
-    # 2. Fahrzeugschein als stilisiertes Bild generieren
-    #doc_prompt = f"A realistic German vehicle registration document (Fahrzeugschein) for a {car.name}, filled with example data, document style, high-res scan"
-    #doc_response = client.images.generate(prompt=doc_prompt,
-    #                                      model="dall-e-3",
-    #                                      size="1024x1024")
-    #doc_url = doc_response.data[0].url
-    #doc_temp = NamedTemporaryFile(delete=True)
-    #doc_temp.write(requests.get(doc_url).content)
-    #doc_temp.flush()
-    #car.fahrzeugschein.save(f"{car.name.lower().replace(' ', '_')}_fahrzeugschein.png", ContentFile(doc_temp.read()), save=True)
-
 
 class Command(BaseCommand):
-    help = "Erstellt für alle Fahrzeuge in der Datenbank Fake-Bilder und Fahrzeugscheine über OpenAI (Dall-E)"
+    help = "Erstellt für alle Fahrzeuge ohne Bild in der Datenbank Fake-Bilder über OpenAI (Dall-E)"
 
     def handle(self, *args, **kwargs):
-        auto = Fahrzeug.objects.get(id=1)
-        print(auto)
-        generate_and_save_assets_for_car(auto)
+        autos = Fahrzeug.objects.filter(foto='')
+        for auto in autos:
+            generate_and_save_assets_for_car(auto)
 
 
 

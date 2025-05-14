@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Fuhrparkübersicht</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4 text-center">🚗 Fuhrparkübersicht</h1>
+
+    <div class="table-responsive shadow rounded">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Kennzeichen</th>
+                <th scope="col">Hersteller</th>
+                <th scope="col">Modell</th>
+                <th scope="col">Baujahr</th>
+                <th scope="col">Kilometerstand</th>
+                <th scope="col">Kraftstoff</th>
+                <th scope="col">Getriebe</th>
+                <th scope="col">Farbe</th>
+                <th scope="col">Sitze</th>
+                <th scope="col">Türen</th>
+                <th scope="col">Status</th>
+                <th scope="col">Preis (€)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fahrzeug in fahrzeuge %}
+                <tr>
+                    <td>{{ fahrzeug.kennzeichen }}</td>
+                    <td>{{ fahrzeug.hersteller }}</td>
+                    <td>{{ fahrzeug.modell }}</td>
+                    <td>{{ fahrzeug.baujahr }}</td>
+                    <td>{{ fahrzeug.kilometerstand }} km</td>
+                    <td>
+                        {% if fahrzeug.kraftstoffart == "B" %}Benzin
+                        {% elif fahrzeug.kraftstoffart == "D" %}Diesel
+                        {% elif fahrzeug.kraftstoffart == "E" %}Elektro
+                        {% elif fahrzeug.kraftstoffart == "H" %}Hybrid
+                        {% else %}-{% endif %}
+                    </td>
+                    <td>
+                        {% if fahrzeug.getriebeart == "M" %}Manuell
+                        {% else %}Automatik
+                        {% endif %}
+                    </td>
+                    <td>{{ fahrzeug.farbe }}</td>
+                    <td>{{ fahrzeug.sitzanzahl }}</td>
+                    <td>{{ fahrzeug.tueranzahl }}</td>
+                    <td>
+                        {% if fahrzeug.status == "verfügbar" %}
+                            <span class="badge bg-success">Verfügbar</span>
+                        {% elif fahrzeug.status == "vermietet" %}
+                            <span class="badge bg-warning text-dark">Vermietet</span>
+                        {% elif fahrzeug.status == "wartung" %}
+                            <span class="badge bg-danger">In Wartung</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unbekannt</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ fahrzeug.mietpreis_pro_tag }} €</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="12" class="text-center text-muted">Keine Fahrzeuge gefunden.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
